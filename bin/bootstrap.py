@@ -1382,8 +1382,7 @@ python-openpyxl
 #                                   "deleteme=$(pwd)",
 #                                   "cd ..",
 #                                   'rm -rf "$deleteme"'
-                                   ],
-                log = log
+                                   ]
                 )
 
 
