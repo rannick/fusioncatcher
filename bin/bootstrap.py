@@ -542,7 +542,8 @@ def cmd(cmds = [],
     r = []
     rr = []
     if log:
-        file(log,"a").write("\n")
+        with open(log, 'a') as file:
+            file.write("\n")
     for c in cmds:
         if not c:
             continue
@@ -553,10 +554,12 @@ def cmd(cmds = [],
             if commandline == "chmod +x custom_install.sh":
                 pass
             elif commandline == "./custom_install.sh":
-                custom = [e.rstrip("\r\n")+"\n" for e in file("custom_install.sh","r") if e.rstrip("\r\n") and (not e.startswith("#")) and (not e.startswith("exit")) ]
-                file(log,"a").writelines(custom)
+                custom = [e.rstrip("\r\n") + "\n" for e in open("custom_install.sh", "r") if e.rstrip("\r\n") and (not e.startswith("#")) and (not e.startswith("exit"))]
+                with open(log, 'a') as file:
+                    file.writelines(custom)
             else:
-                file(log,"a").write(commandline+"\n")
+                with open(log, 'a') as file:
+                    file.write(commandline + "\n")
 
         if verbose:
             print("    # " + ' '.join(c0))
@@ -1900,10 +1903,12 @@ python-openpyxl
         print("  * Updating the SHEBANG of Python scripts with '%s'" % (PYTHON_EXE,))
         pies = [os.path.join(FUSIONCATCHER_BIN,f) for f in os.listdir(FUSIONCATCHER_BIN) if f.endswith('.py') and os.path.isfile(os.path.join(FUSIONCATCHER_BIN,f)) and not f.startswith('.')]
         for f in pies:
-            d = file(f,'r').readlines()
+            with open(f, 'r') as file:
+                d = file.readlines()
             if d:
                 d[0] = "#!%s\n" % (PYTHON_EXE,)
-            file(f,'w').writelines(d)
+                with open(f, 'w') as file:
+                    file.writelines(d)
         print("  * Done!")
     #    else:
     #        print "  * Ok!"
@@ -2006,7 +2011,8 @@ python-openpyxl
     data.append("fusioncatcher = %s\n"%(FUSIONCATCHER_VERSION,))
     data.append("\n")
 
-    file(config_file,'w').writelines(data)
+    with open(config_file, 'w') as file:
+        file.writelines(data)
 
     ############################################################################
     ############################################################################
@@ -2084,7 +2090,8 @@ python-openpyxl
         print("")
         txt.append("exit 0")
         txt.insert(0,'#!/usr/bin/env bash')
-        file(f,'w').writelines([el+'\n' for el in txt])
+        with open(f, 'w') as file:
+            file.writelines([el + '\n' for el in txt])
         os.system('chmod +rx "%s"' % (f,))
         file_download = f
         ########################################################################
@@ -2144,7 +2151,8 @@ python-openpyxl
         print("")
         print("All these commands are saved in '%s' file! You may execute '%s' shell script or copy/paste all the previous commands and run them manually in the terminal!" % (f,f))
         print("")
-        file(f,'w').writelines([el+'\n' for el in txt])
+        with open(f, 'w') as file:
+            file.writelines([el + '\n' for el in txt])
         os.system('chmod +rx "%s"' % (f,))
         file_build = f
         ########################################################################
