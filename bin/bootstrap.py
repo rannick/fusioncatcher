@@ -41,15 +41,11 @@ candidate fusion genes!
 
 This file is running/executing/using BLAT.
 """
+from __future__ import print_function
 
+from builtins import input
+from builtins import str
 import sys
-if ( sys.version_info>(3,0)):
-    print "ERROR: Python 3 or newer detected! Python 2.X is needed! FIX: run '/some/python/2.7/python bootstrap.py"
-    sys.exit(1)
-#if ( sys.version_info>(3,0)):
-#    sys.stderr.write("ERROR: Python 3 or newer detected! bootstrap.py needs Python 2.6 or Python 2.7!\n")
-#    sys.stderr.write("  FIX: run '/some/python/2.7/python bootstrap.py'!\n")
-#    sys.exit(1)
 import os
 import optparse
 import shutil
@@ -188,7 +184,7 @@ def PATHS(exe = None, prefix = None, installdir = None, internet = True):
         FUSIONCATCHER_PREFIX = expand(os.path.dirname(installdir.rstrip(os.sep)))
     else:
         FUSIONCATCHER_PATH = expand(FUSIONCATCHER_PREFIX,'fusioncatcher')
-    
+
     FUSIONCATCHER_BIN = expand(FUSIONCATCHER_PATH,'bin')
     FUSIONCATCHER_URL = 'http://sourceforge.net/projects/fusioncatcher/files/fusioncatcher_v1.33.zip'
     FUSIONCATCHER_VERSION = "1.33"
@@ -322,7 +318,7 @@ def expand(*p):
 def ensembl_version(internet = True):
     last_version = "unknown"
     if internet:
-        print "Checking latest version of Ensembl database that is available..."
+        print("Checking latest version of Ensembl database that is available...")
         list_files = []
         try:
             ftp = ftplib.FTP("ftp.ensembl.org",timeout=10)
@@ -348,9 +344,9 @@ def ensembl_version(internet = True):
             except:
                 pass
         if last_version == 'unknown':
-            print "   * Not found! (WARNING: Is the internet connection working?)"
+            print("   * Not found! (WARNING: Is the internet connection working?)")
         else:
-            print "   * Version %s found!" % (last_version,)
+            print("   * Version %s found!" % (last_version,))
     return last_version
 
 
@@ -368,7 +364,7 @@ def test_module(module, name = "", package = "", web = "", verbose = False, exit
             description = '<http://pypi.python.org/pypi/biopython>'
     """
     if verbose:
-        print "Checking if the Python module named '%s' is installed..." % (name,)
+        print("Checking if the Python module named '%s' is installed..." % (name,))
     flag = True
     try:
         __import__(module)
@@ -376,62 +372,62 @@ def test_module(module, name = "", package = "", web = "", verbose = False, exit
         flag = False
         if verbose:
             if os.getuid() == 0:
-                print >>sys.stderr, "  * WARNING: The Python module '%s' is not installed!\n" % (name,)
-                print >>sys.stderr, "             Please, install the Python module: %s (see %s for more info)," % (name,web)
-                print >>sys.stderr, "             like for example using the commands: "
-                print >>sys.stderr, "               sudo apt-get install %s" % (package,)
-                print >>sys.stderr, "             or"
-                print >>sys.stderr, "               sudo yum install %s" % (package,)
-                print >>sys.stderr, "             or"
-                print >>sys.stderr, "               sudo easy_install %s" % (package.lstrip('python').lstrip('-'),)
-                print >>sys.stderr, ""
+                print("  * WARNING: The Python module '%s' is not installed!\n" % (name,), file=sys.stderr)
+                print("             Please, install the Python module: %s (see %s for more info)," % (name,web), file=sys.stderr)
+                print("             like for example using the commands: ", file=sys.stderr)
+                print("               sudo apt-get install %s" % (package,), file=sys.stderr)
+                print("             or", file=sys.stderr)
+                print("               sudo yum install %s" % (package,), file=sys.stderr)
+                print("             or", file=sys.stderr)
+                print("               sudo easy_install %s" % (package.lstrip('python').lstrip('-'),), file=sys.stderr)
+                print("", file=sys.stderr)
             else:
-                print >>sys.stderr, "  * WARNING: The Python module '%s' is not installed!\n" % (name,)
-                print >>sys.stderr, "             Please, install the Python module: %s (see %s for more info). It is recommended" % (name,web)
-                print >>sys.stderr, "             that YOU the admin/root install this module, like for example using the commands: "
-                print >>sys.stderr, "               apt-get install %s" % (package,)
-                print >>sys.stderr, "             or"
-                print >>sys.stderr, "               yum install %s" % (package,)
-                print >>sys.stderr, "             or"
-                print >>sys.stderr, "               easy_install %s" % (package.lstrip('python').lstrip('-'),)
-                print >>sys.stderr, ""
+                print("  * WARNING: The Python module '%s' is not installed!\n" % (name,), file=sys.stderr)
+                print("             Please, install the Python module: %s (see %s for more info). It is recommended" % (name,web), file=sys.stderr)
+                print("             that YOU the admin/root install this module, like for example using the commands: ", file=sys.stderr)
+                print("               apt-get install %s" % (package,), file=sys.stderr)
+                print("             or", file=sys.stderr)
+                print("               yum install %s" % (package,), file=sys.stderr)
+                print("             or", file=sys.stderr)
+                print("               easy_install %s" % (package.lstrip('python').lstrip('-'),), file=sys.stderr)
+                print("", file=sys.stderr)
 
-            print >>sys.stderr, "  * HINTS: Please, also make sure that the following are installed also, before installing the above Python library:"
-            print >>sys.stderr, "     - Building tools:"
-            print >>sys.stderr, "         sudo apt-get install build-essential"
-            print >>sys.stderr, "         or"
-            print >>sys.stderr, '         sudo yum groupinstall "Development Tools"'
-            print >>sys.stderr, '         sudo yum install ncurses'
-            print >>sys.stderr, '         sudo yum install ncurses-devel'
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, '         sudo zypper install --type pattern Basis-Devel'
-            print >>sys.stderr, '         sudo zypper in ncurses'
-            print >>sys.stderr, '         sudo zypper in ncurses-devel'
-            print >>sys.stderr, "     - Python development:"
-            print >>sys.stderr, "         sudo apt-get install python-dev"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install python-devel"
-            print >>sys.stderr, "     - GCC:"
-            print >>sys.stderr, "         sudo apt-get install gcc"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install gcc"
-            print >>sys.stderr, "     - ZLIB development:"
-            print >>sys.stderr, "         sudo apt-get install zlib-dev"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install zlib-devel"
-            print >>sys.stderr, "     - NumPy library:"
-            print >>sys.stderr, "         sudo apt-get install python-numpy"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install python-numpy"
-            print >>sys.stderr, "     - BioPython library:"
-            print >>sys.stderr, "         sudo apt-get install python-biopython"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install python-biopython"
-            print >>sys.stderr, "     - TBB:"
-            print >>sys.stderr, "         sudo apt-get install libtbb-dev"
-            print >>sys.stderr, "           or"
-            print >>sys.stderr, "         sudo yum install libtbb-dev"
-            print >>sys.stderr, ""
+            print("  * HINTS: Please, also make sure that the following are installed also, before installing the above Python library:", file=sys.stderr)
+            print("     - Building tools:", file=sys.stderr)
+            print("         sudo apt-get install build-essential", file=sys.stderr)
+            print("         or", file=sys.stderr)
+            print('         sudo yum groupinstall "Development Tools"', file=sys.stderr)
+            print('         sudo yum install ncurses', file=sys.stderr)
+            print('         sudo yum install ncurses-devel', file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print('         sudo zypper install --type pattern Basis-Devel', file=sys.stderr)
+            print('         sudo zypper in ncurses', file=sys.stderr)
+            print('         sudo zypper in ncurses-devel', file=sys.stderr)
+            print("     - Python development:", file=sys.stderr)
+            print("         sudo apt-get install python-dev", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install python-devel", file=sys.stderr)
+            print("     - GCC:", file=sys.stderr)
+            print("         sudo apt-get install gcc", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install gcc", file=sys.stderr)
+            print("     - ZLIB development:", file=sys.stderr)
+            print("         sudo apt-get install zlib-dev", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install zlib-devel", file=sys.stderr)
+            print("     - NumPy library:", file=sys.stderr)
+            print("         sudo apt-get install python-numpy", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install python-numpy", file=sys.stderr)
+            print("     - BioPython library:", file=sys.stderr)
+            print("         sudo apt-get install python-biopython", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install python-biopython", file=sys.stderr)
+            print("     - TBB:", file=sys.stderr)
+            print("         sudo apt-get install libtbb-dev", file=sys.stderr)
+            print("           or", file=sys.stderr)
+            print("         sudo yum install libtbb-dev", file=sys.stderr)
+            print("", file=sys.stderr)
 
         if exit:
             sys.exit(1)
@@ -440,16 +436,16 @@ def test_module(module, name = "", package = "", web = "", verbose = False, exit
         module_path = getattr(__import__(module),'__path__')[0]
     except:
         if verbose:
-            print >>sys.stderr, "  * WARNING: Cannot find the path of the Python module '%s'!" % (name,)
+            print("  * WARNING: Cannot find the path of the Python module '%s'!" % (name,), file=sys.stderr)
 
     if verbose:
         if flag:
             if module_path:
-                print "  * Ok! Python module '%s' found at '%s'!" % (name,module_path)
+                print("  * Ok! Python module '%s' found at '%s'!" % (name,module_path))
             else:
-                print "  * Ok! Python module '%s' found!" % (name,)
+                print("  * Ok! Python module '%s' found!" % (name,))
         else:
-            print >>sys.stderr,"  * WARNING! Python module '%s' not found!" % (name,)
+            print("  * WARNING! Python module '%s' not found!" % (name,), file=sys.stderr)
     return (flag,module_path)
 
 
@@ -468,15 +464,15 @@ def test_tool(name = "",
     """
     flag = False
     if verbose:
-        print "Checking if '%s' is installed..." % (name,)
+        print("Checking if '%s' is installed..." % (name,))
 
     p = which(exe, cwd = False)
     if p and versions:
         #p = os.path.dirname(expand(p))
         p = expand(p)
         if verbose:
-            print "  * Found at '%s'!" % (p,)
-            print "  * Test running:  '%s %s'" % (p,param)
+            print("  * Found at '%s'!" % (p,))
+            print("  * Test running:  '%s %s'" % (p,param))
         (flag,r) = cmd([[[p,param],False]], exit = False, verbose = False)
         r = [line for line in r if line.lower().find(version_word.lower()) != -1]
         f = False
@@ -490,13 +486,13 @@ def test_tool(name = "",
         if f:
             flag = True
             if verbose:
-                print "  * Found supported version '%s'!" % (v,)
+                print("  * Found supported version '%s'!" % (v,))
         elif verbose:
-            print >>sys.stderr,"  * WARNING: Unsupported version found!"
+            print("  * WARNING: Unsupported version found!", file=sys.stderr)
             p = None
             flag = False
     elif verbose:
-        print >>sys.stderr,"  * WARNING: Not found!"
+        print("  * WARNING: Not found!", file=sys.stderr)
 
     return (flag,p)
 
@@ -561,15 +557,15 @@ def cmd(cmds = [],
                 file(log,"a").writelines(custom)
             else:
                 file(log,"a").write(commandline+"\n")
-                
+
         if verbose:
-            print "    # " + ' '.join(c0)
+            print("    # " + ' '.join(c0))
 
         if c[0][0] == "cd" and len(c[0]) == 2:
             exit = os.chdir(c[0][1])
             if verbose and exit:
-                print >>sys.stderr,''
-                print >>sys.stderr, "  * ERROR: Unable to change the directory: '%s'!" % (c[0][1],)
+                print('', file=sys.stderr)
+                print("  * ERROR: Unable to change the directory: '%s'!" % (c[0][1],), file=sys.stderr)
             if exit:
                 sys.exit(1)
         else:
@@ -583,18 +579,18 @@ def cmd(cmds = [],
 
             if anerr:
                 if verbose:
-                    print >>sys.stderr,''
-                    print >>sys.stderr, "  * ERROR: Unable to execute: '%s' (shell = %s)!" % (' '.join(c0),str(c1))
+                    print('', file=sys.stderr)
+                    print("  * ERROR: Unable to execute: '%s' (shell = %s)!" % (' '.join(c0),str(c1)), file=sys.stderr)
                 if exit:
                     sys.exit(1)
                 break
             elif p and p.returncode != 0:
                 f = False
                 if verbose:
-                    print >>sys.stderr,''
-                    print >>sys.stderr, "  * ERROR: Unable to execute: '%s' (shell = %s)!" % (' '.join(c0),str(c1))
+                    print('', file=sys.stderr)
+                    print("  * ERROR: Unable to execute: '%s' (shell = %s)!" % (' '.join(c0),str(c1)), file=sys.stderr)
                     for line in r:
-                        print >>sys.stderr, line
+                        print(line, file=sys.stderr)
                 if exit:
                     sys.exit(1)
                 rr.extend(r)
@@ -629,7 +625,7 @@ def install_module(package, url, path, exe = '', pythonpath = '', root_aptget_in
     cmds = []
     if os.getuid() == 0 and root_aptget_install:
         if verbose:
-            print "Installing Python package '%s' as root..." % (package,)
+            print("Installing Python package '%s' as root..." % (package,))
         f,r = cmd([(['apt-get','--help'],False)], verbose = False, exit = False, log = log)
         if f:
             cmds = cmds + [(['apt-get','--yes','install',package],False)]
@@ -647,13 +643,13 @@ def install_module(package, url, path, exe = '', pythonpath = '', root_aptget_in
                         cmds = cmds +[([apython,'pip','-y',package.lstrip('python').lstrip('-')],False)]
                     else:
                         if verbose:
-                            print >>sys.stderr, "  * ERROR: No idea how to install the Python module '%s' using other package " % (module,)
-                            print >>sys.stderr, "           managers than 'apt-get', 'yum', 'easy_install', or 'pip'!"
+                            print("  * ERROR: No idea how to install the Python module '%s' using other package " % (module,), file=sys.stderr)
+                            print("           managers than 'apt-get', 'yum', 'easy_install', or 'pip'!", file=sys.stderr)
                         if exit:
                             sys.exit(1)
     else:
         if verbose:
-            print "Installing Python module '%s' locally '%s'..." % (package,path)
+            print("Installing Python module '%s' locally '%s'..." % (package,path))
         cmds = [(['mkdir','-p', short_path],False),
                 (["rm",'-rf', os.path.join(short_path,afile)],False)]
         if url.startswith('http:') or url.startswith('https:') or url.startswith('ftp:'):
@@ -673,7 +669,7 @@ def install_module(package, url, path, exe = '', pythonpath = '', root_aptget_in
         log = log
         )
     if verbose:
-        print "  * Done!"
+        print("  * Done!")
 
 #############################################
 # install a tool (containing executables)
@@ -691,7 +687,7 @@ def install_tool(name, url, path, verbose = True, exit = True, env_configure = [
     # cd ..
     # ln -s velvet_1.2.08 velvet
     if verbose:
-        print "Installing tool '%s' at '%s' from '%s'" % (name,path,url)
+        print("Installing tool '%s' at '%s' from '%s'" % (name,path,url))
     afile = os.path.basename(url)
     path = os.path.abspath(os.path.expanduser(path))
     short_path = os.path.dirname(path.rstrip(os.path.sep))
@@ -747,7 +743,7 @@ def install_tool(name, url, path, verbose = True, exit = True, env_configure = [
             newdir = newdir[0]
         else:
             if verbose:
-                print >>sys.stderr, "ERROR: Cannot detect the directory where the archive has been decompressed! A potential solution is to delete entirely the previously FusionCatcher installation or to install FusionCatcher in a different path!"
+                print("ERROR: Cannot detect the directory where the archive has been decompressed! A potential solution is to delete entirely the previously FusionCatcher installation or to install FusionCatcher in a different path!", file=sys.stderr)
             if exit:
                 sys.exit(1)
 
@@ -828,11 +824,11 @@ def install_tool(name, url, path, verbose = True, exit = True, env_configure = [
                 ]
         cmd(cmds,
             verbose = verbose,
-            exit = exit, 
+            exit = exit,
             log = log
             )
     if verbose:
-        print "  * Done!"
+        print("  * Done!")
 
 #############################################
 # User input
@@ -844,7 +840,7 @@ def accept(question = "", yes = True, no = False, exit = False, force = False, s
     flag = yes
     if not force:
         if yes and no:
-            print >>sys.stderr, "ERROR: YES and NO answer cannot be both default answers!"
+            print("ERROR: YES and NO answer cannot be both default answers!", file=sys.stderr)
             sys.exit(1)
         y = 'y'
         if yes: # default is YES
@@ -855,9 +851,9 @@ def accept(question = "", yes = True, no = False, exit = False, force = False, s
         s = 's'
         while True:
             if skip:
-                text = raw_input("%s [%s/%s/%s] (Y = YES, N = NO, S = SKIP): " % (question, y, n, s))
+                text = input("%s [%s/%s/%s] (Y = YES, N = NO, S = SKIP): " % (question, y, n, s))
             else:
-                text = raw_input("%s [%s/%s]: " % (question, y, n))
+                text = input("%s [%s/%s]: " % (question, y, n))
             if not text:
                 if yes:
                     text = 'y'
@@ -910,7 +906,7 @@ def module(module,
                    exit = False,
                    force = force)
         if not r:
-            p = expand(raw_input("  Type new path: "))
+            p = expand(input("  Type new path: "))
             if p:
                 path = p
             thepath = path
@@ -975,9 +971,9 @@ def tool(name,
         if not r:
             p = ''
             if skip:
-                p = expand(raw_input("  Type new path (type S for SKIP): "))
+                p = expand(input("  Type new path (type S for SKIP): "))
             else:
-                p = expand(raw_input("  Type new path: "))
+                p = expand(input("  Type new path: "))
                 if p:
                     path = p
                 thepath = path
@@ -1132,7 +1128,7 @@ if __name__ == '__main__':
     hints = """
 ================================================================================
 NOTE: On a Ubuntu running these before installing FusionCatcher might make the installation go smoother:
-    
+
 sudo apt-get -y install \\
 build-essential\\
 libncurses5-dev \\
@@ -1164,7 +1160,7 @@ python-xlrd \\
 python-openpyxl
 ================================================================================
 """
-    print hints
+    print(hints)
     time.sleep(5) # wait 5 seconds
 
     #
@@ -1179,59 +1175,59 @@ python-openpyxl
     # List all dependencies
     ############################################################################
     if options.list_dependencies:
-        print "FusionCatcher [REQUIRED]: ",FUSIONCATCHER_URL
-        print "NumPy [REQUIRED but strongly recommended to be installed by root]: ",NUMPY_URL
-        print "BioPython [REQUIRED but strongly recommended to be installed by root]: ",BIOPYTHON_URL
-        print "Python module XLRD [OPTIONAL; needed only one plans to build database indexes from scratch instead of downloading them]: ",XLRD_URL
-        print "Python module OpenPyXL [OPTIONAL; needed only one plans to build database indexes from scratch instead of downloading them]: ",OPENPYXL_URL
-        print "Python SETUPTOOLS [OPTIONAL; needed to install XLRD and/or OpenPyXL]: ",SETUPTOOLS_URL
-        print "Bowtie: [REQUIRED]: ",BOWTIE_URL
-        print "Bowtie2: [REQUIRED]: ",BOWTIE2_URL
-        print "Blat [REQUIRED]: ",BLAT_URL
-        print "LiftOver [REQUIRED]: ",LIFTOVER_URL
-        print "FaToTwoBit (from Blat toolbox) [REQUIRED]: ",FATOTWOBIT_URL
+        print("FusionCatcher [REQUIRED]: ",FUSIONCATCHER_URL)
+        print("NumPy [REQUIRED but strongly recommended to be installed by root]: ",NUMPY_URL)
+        print("BioPython [REQUIRED but strongly recommended to be installed by root]: ",BIOPYTHON_URL)
+        print("Python module XLRD [OPTIONAL; needed only one plans to build database indexes from scratch instead of downloading them]: ",XLRD_URL)
+        print("Python module OpenPyXL [OPTIONAL; needed only one plans to build database indexes from scratch instead of downloading them]: ",OPENPYXL_URL)
+        print("Python SETUPTOOLS [OPTIONAL; needed to install XLRD and/or OpenPyXL]: ",SETUPTOOLS_URL)
+        print("Bowtie: [REQUIRED]: ",BOWTIE_URL)
+        print("Bowtie2: [REQUIRED]: ",BOWTIE2_URL)
+        print("Blat [REQUIRED]: ",BLAT_URL)
+        print("LiftOver [REQUIRED]: ",LIFTOVER_URL)
+        print("FaToTwoBit (from Blat toolbox) [REQUIRED]: ",FATOTWOBIT_URL)
 #        print "SAMTools [REQUIRED]: ",SAMTOOLS_URL
-        print "SRAToolKit (from NCBI) [REQUIRED]: ",SRATOOLKIT_URL
-        print "STAR [REQUIRED]: ",STAR_URL
-        print "BWA [REQUIRED]: ",BWA_URL
-        print "SeqTK [REQUIRED]: ",SEQTK_URL
-        print "fastqtk [REQUIRED]: ",FASTQTK_URL
-        print "BBMap [REQUIRED]: ",BBMAP_URL
-        print "Velvet (de novo assembler) [OPTIONAL]: ",VELVET_URL
-        print "Picard (Java-based SAM tools) [OPTIONAL]: ",PICARD_URL
-        print "GNU Parallel (shell tool for executing jobs in parallel) [OPTIONAL]: ",PARALLEL_URL
-        print "Pre-built database indexes for human [REQUIRED unless one wants to build them from scratch]:"
-        print "  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.aa" % (v,)
-        print "  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ab" % (v,)
-        print "  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ac" % (v,)
-        print "  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ad" % (v,)
+        print("SRAToolKit (from NCBI) [REQUIRED]: ",SRATOOLKIT_URL)
+        print("STAR [REQUIRED]: ",STAR_URL)
+        print("BWA [REQUIRED]: ",BWA_URL)
+        print("SeqTK [REQUIRED]: ",SEQTK_URL)
+        print("fastqtk [REQUIRED]: ",FASTQTK_URL)
+        print("BBMap [REQUIRED]: ",BBMAP_URL)
+        print("Velvet (de novo assembler) [OPTIONAL]: ",VELVET_URL)
+        print("Picard (Java-based SAM tools) [OPTIONAL]: ",PICARD_URL)
+        print("GNU Parallel (shell tool for executing jobs in parallel) [OPTIONAL]: ",PARALLEL_URL)
+        print("Pre-built database indexes for human [REQUIRED unless one wants to build them from scratch]:")
+        print("  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.aa" % (v,))
+        print("  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ab" % (v,))
+        print("  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ac" % (v,))
+        print("  * http://sourceforge.net/projects/fusioncatcher/files/data/%s.tar.gz.ad" % (v,))
 
         sys.exit(0)
 
     ############################################################################
     # Current working directory
     ############################################################################
-    print "Current working directory: '%s'" % (os.getcwd(),)
+    print("Current working directory: '%s'" % (os.getcwd(),))
 
     ############################################################################
     # Absolute path to the Python executable
     ############################################################################
-    print "Obtaining the absolute path of the Python executable..."
+    print("Obtaining the absolute path of the Python executable...")
     PYTHON_EXE = expand(sys.executable)
-    print "  * Ok! '%s' found!" % (PYTHON_EXE,)
+    print("  * Ok! '%s' found!" % (PYTHON_EXE,))
 
     ############################################################################
     # Give option to exit to user if it is not the right Python
     ############################################################################
-    print "Python used for installation of FusionCatcher: '%s'" % (PYTHON_EXE,)
+    print("Python used for installation of FusionCatcher: '%s'" % (PYTHON_EXE,))
     r = accept(question = "  Do you accept this Python?",
                yes = True,
                no = False,
                exit = False,
                force = options.force_yes)
     if not r:
-        p = expand(raw_input("  Type new path and filename of the Python binary: "))
-        print >>sys.stderr,"Now the boostrap.py will be re-launched!"
+        p = expand(input("  Type new path and filename of the Python binary: "))
+        print("Now the boostrap.py will be re-launched!", file=sys.stderr)
         x = '"%s" "%s" %s' % (p,expand(__file__),' '.join(sys.argv[1:]))
         xx = os.system(x)
         sys.exit(0)
@@ -1240,26 +1236,26 @@ python-openpyxl
     ############################################################################
     # Python version
     ############################################################################
-    print "Checking Python version..."
+    print("Checking Python version...")
     version = sys.version_info
     if version >= (2,6) and version < (3,0):
-        print "  * Ok! Found Python version: %s.%s" % (version[0],version[1])
+        print("  * Ok! Found Python version: %s.%s" % (version[0],version[1]))
     else:
-        print >>sys.stderr, "  * ERROR: Found Python version: %s.%s !\n" % (version[0],version[1])
-        print >>sys.stderr, "           The Python version should be >=2.6.0 and < 3.0 . If there is another"
-        print >>sys.stderr, "           Python version installed you could run again this script using that"
-        print >>sys.stderr, "           Python version, for example: '/some/other/pythonXYZ bootstrap.py' !"
+        print("  * ERROR: Found Python version: %s.%s !\n" % (version[0],version[1]), file=sys.stderr)
+        print("           The Python version should be >=2.6.0 and < 3.0 . If there is another", file=sys.stderr)
+        print("           Python version installed you could run again this script using that", file=sys.stderr)
+        print("           Python version, for example: '/some/other/pythonXYZ bootstrap.py' !", file=sys.stderr)
         sys.exit(1)
 
     ############################################################################
     # Test 64-bit environment
     ############################################################################
-    print "Checking if this environment is a 64-bit environment..."
+    print("Checking if this environment is a 64-bit environment...")
     import struct
     if struct.calcsize("P") * 8 >= 64:
-        print "  * Ok! 64-bit environment found."
+        print("  * Ok! 64-bit environment found.")
     else:
-        print >>sys.stderr, "  * ERROR: Not a 64-bit environment! 64-bit environment is needed!"
+        print("  * ERROR: Not a 64-bit environment! 64-bit environment is needed!", file=sys.stderr)
         sys.exit(1)
 
     ############################################################################
@@ -1267,13 +1263,13 @@ python-openpyxl
     ############################################################################
     r = os.system('wget --help > /dev/null 2>&1')
     if r != 0:
-        print >>sys.stderr, "  * ERROR: 'wget' is not available! Please, install 'wget'!"
+        print("  * ERROR: 'wget' is not available! Please, install 'wget'!", file=sys.stderr)
         sys.exit(1)
 
-    print ""
-    print "Installing FusionCatcher from <http://github.com/ndaniel/fusioncatcher>"
-    print "------------------------------------------------------------------------"
-    print ""
+    print("")
+    print("Installing FusionCatcher from <http://github.com/ndaniel/fusioncatcher>")
+    print("------------------------------------------------------------------------")
+    print("")
 
     # validate options
     if options.skip_install_all and (options.install_all_tools or
@@ -1326,7 +1322,7 @@ python-openpyxl
                     ps.append(p)
             os.environ["PATH"] = os.pathsep.join(ps)
         else:
-            print >> sys.stderr,"ERROR: '%s' should be a directory!" % (options.local,)
+            print("ERROR: '%s' should be a directory!" % (options.local,), file=sys.stderr)
             sys.exit(1)
     elif options.local_fusioncatcher:
         FUSIONCATCHER_URL = options.local_fusioncatcher
@@ -1342,7 +1338,7 @@ python-openpyxl
     ############################################################################
     # Installation path of FusionCatcher
     ############################################################################
-    print "Path for installation of FusionCatcher: '%s'" % (expand(options.installation_directory),)
+    print("Path for installation of FusionCatcher: '%s'" % (expand(options.installation_directory),))
     r = accept(question = "  Do you accept this path (WARNING: some files/directories within this path may be deleted/replaced/updated without warning)?",
                yes = True,
                no = False,
@@ -1352,13 +1348,13 @@ python-openpyxl
         FUSIONCATCHER_PATH = expand(options.installation_directory)
         PATHS(exe = PYTHON_EXE, installdir = FUSIONCATCHER_PATH)
     else:
-        p = expand(raw_input("  Type new path: "))
+        p = expand(input("  Type new path: "))
         PATHS(exe = PYTHON_EXE, installdir = p)
 
     ############################################################################
     # Number of threads for FusionCatcher
     ############################################################################
-    print "Default number of threads/CPUs to be used by FusionCatcher (use 0 for using the number of CPUs detected at the runtime): '%s'" % (FUSIONCATCHER_THREADS,)
+    print("Default number of threads/CPUs to be used by FusionCatcher (use 0 for using the number of CPUs detected at the runtime): '%s'" % (FUSIONCATCHER_THREADS,))
     r = accept(question = "  Do you accept?",
                yes = True,
                no = False,
@@ -1367,7 +1363,7 @@ python-openpyxl
     if r:
         FUSIONCATCHER_THREADS = '1'
     else:
-        p = raw_input("  Type the new default for number of threads: ")
+        p = input("  Type the new default for number of threads: ")
         FUSIONCATCHER_THREADS = p
 
     ############################################################################
@@ -1919,7 +1915,7 @@ python-openpyxl
     ############################################################################
     # PYTHON SHEBANG
     ############################################################################
-    print "Checking the shebang of FusionCatcher Python scripts..."
+    print("Checking the shebang of FusionCatcher Python scripts...")
 #    if which('python') != PYTHON_EXE or os.getuid() == 0: # root
     r = accept(question = "  Shall the shebang of all Python scripts, belonging to FusionCatcher, be set/hardcoded to use this '%s'?" % (PYTHON_EXE,),
                yes = True,
@@ -1927,25 +1923,25 @@ python-openpyxl
                exit = False,
                force = options.force_yes)
     if not r:
-        print "  * The shebang of all Python scripts, belonging to FusionCatcher, is '#!/usr/bin/env python'!"
+        print("  * The shebang of all Python scripts, belonging to FusionCatcher, is '#!/usr/bin/env python'!")
     else:
-        print "  * Updating the SHEBANG of Python scripts with '%s'" % (PYTHON_EXE,)
+        print("  * Updating the SHEBANG of Python scripts with '%s'" % (PYTHON_EXE,))
         pies = [os.path.join(FUSIONCATCHER_BIN,f) for f in os.listdir(FUSIONCATCHER_BIN) if f.endswith('.py') and os.path.isfile(os.path.join(FUSIONCATCHER_BIN,f)) and not f.startswith('.')]
         for f in pies:
             d = file(f,'r').readlines()
             if d:
                 d[0] = "#!%s\n" % (PYTHON_EXE,)
             file(f,'w').writelines(d)
-        print "  * Done!"
+        print("  * Done!")
     #    else:
     #        print "  * Ok!"
 
     ############################################################################
     # FUSIONCATCHER CONFIGURATION
     ############################################################################
-    print "Updating the configuration file of FusionCatcher..."
-    print "  * configuration file '%s'" % (FUSIONCATCHER_CONFIGURATION,)
-    
+    print("Updating the configuration file of FusionCatcher...")
+    print("  * configuration file '%s'" % (FUSIONCATCHER_CONFIGURATION,))
+
     def update_path(SOME_PATH,executable,subdir='src'):
         # update the SOME_PATH with subdir
         some_var = os.path.join(SOME_PATH,subdir)
@@ -1961,7 +1957,7 @@ python-openpyxl
     lzop = update_path(LZOP_PATH,'lzop','src')
     star = update_path(STAR_PATH,'star','source')
     parallel2 = update_path(PARALLEL_PATH,'parallel','src')
-        
+
 #    # update the SRATOOLKIT with 'bin'
 #    sra = os.path.join(SRATOOLKIT_PATH,'bin')
 #    if (SRATOOLKIT_PATH and
@@ -2037,21 +2033,21 @@ python-openpyxl
     data.append("[versions]\n")
     data.append("fusioncatcher = %s\n"%(FUSIONCATCHER_VERSION,))
     data.append("\n")
-    
+
     file(config_file,'w').writelines(data)
 
     ############################################################################
     ############################################################################
-    print "-------------------------------------------------------------------------------"
-    print "FusionCatcher is installed here:\n  %s" % (FUSIONCATCHER_PATH,)
-    print "FusionCatcher's scripts are here:\n  %s" % (os.path.join(FUSIONCATCHER_BIN),)
-    print "FusionCatcher's dependencies and tools are installed here:\n  %s" % (os.path.join(FUSIONCATCHER_TOOLS),)
-    print "FusionCatcher's organism data is here:\n  %s" % (os.path.join(FUSIONCATCHER_DATA),)
-    print "Run FusionCatcher as following:\n  %s" % (os.path.join(FUSIONCATCHER_BIN,'fusioncatcher'),)
-    print "In order to download and build the files for FusionCatcher run the following:\n  %s" % (os.path.join(FUSIONCATCHER_PATH,FUSIONCATCHER_BIN,'fusioncatcher-build'),)
-    print ""
-    print HIGHLIGHT+"=== Installed successfully! ==="+ENDC
-    print ""
+    print("-------------------------------------------------------------------------------")
+    print("FusionCatcher is installed here:\n  %s" % (FUSIONCATCHER_PATH,))
+    print("FusionCatcher's scripts are here:\n  %s" % (os.path.join(FUSIONCATCHER_BIN),))
+    print("FusionCatcher's dependencies and tools are installed here:\n  %s" % (os.path.join(FUSIONCATCHER_TOOLS),))
+    print("FusionCatcher's organism data is here:\n  %s" % (os.path.join(FUSIONCATCHER_DATA),))
+    print("Run FusionCatcher as following:\n  %s" % (os.path.join(FUSIONCATCHER_BIN,'fusioncatcher'),))
+    print("In order to download and build the files for FusionCatcher run the following:\n  %s" % (os.path.join(FUSIONCATCHER_PATH,FUSIONCATCHER_BIN,'fusioncatcher-build'),))
+    print("")
+    print(HIGHLIGHT+"=== Installed successfully! ==="+ENDC)
+    print("")
     if options.build:
         time.sleep(5)
         cmd([
@@ -2063,23 +2059,23 @@ python-openpyxl
             verbose = True,
             log = log)
         c = [os.path.join(FUSIONCATCHER_BIN,'fusioncatcher-build'),"-g",FUSIONCATCHER_ORGANISM,"-o",os.path.join(FUSIONCATCHER_DATA,ENSEMBL_VERSION)]
-        print "  # %s" % (' '.join([el.replace(' ','\\ ') for el in c]))
+        print("  # %s" % (' '.join([el.replace(' ','\\ ') for el in c])))
         time.sleep(5)
         subprocess.call(c)
     else:
-        print "*****************************************************************"
-        print "*  DON'T FORGET to download (or build) the organism's data needed by FusionCatcher to run!"
-        print "*****************************************************************"
-        print ""
-        print "Several options to get the data needed by FusionCatcher are shown below (please try them in this order)!"
+        print("*****************************************************************")
+        print("*  DON'T FORGET to download (or build) the organism's data needed by FusionCatcher to run!")
+        print("*****************************************************************")
+        print("")
+        print("Several options to get the data needed by FusionCatcher are shown below (please try them in this order)!")
         ########################################################################
-        print ""
-        print "---------------------------------------------------------------------------"
-        print "*  OPTION 1: Download the data needed by FusionCatcher from SOURCEFORGE!"
-        print "             THIS IS HIGHLY RECOMMENDED"
-        print "---------------------------------------------------------------------------"
-        print "In order to download the latest human data files needed by FusionCatcher, please run these (it will take several hours):"
-        print ""
+        print("")
+        print("---------------------------------------------------------------------------")
+        print("*  OPTION 1: Download the data needed by FusionCatcher from SOURCEFORGE!")
+        print("             THIS IS HIGHLY RECOMMENDED")
+        print("---------------------------------------------------------------------------")
+        print("In order to download the latest human data files needed by FusionCatcher, please run these (it will take several hours):")
+        print("")
         txt = []
         txt.append("set -e")
         txt.append("rm -rf %s" % (FUSIONCATCHER_CURRENT.replace(" ","\\ "),))
@@ -2109,11 +2105,11 @@ python-openpyxl
         txt.append("rm -f %s.tar.gz" % (os.path.join(FUSIONCATCHER_DATA,v).replace(" ","\\ "),))
         txt.append("rm -f %s/%s.md5" % (FUSIONCATCHER_DATA.replace(" ","\\ "),v))
         for t in txt:
-            print t
-        print ""
+            print(t)
+        print("")
         f = os.path.join(FUSIONCATCHER_BIN,"download-"+v+".sh")
-        print "All these commands are saved in '%s' file! You may execute '%s' shell script or copy/paste all the previous commands and run them manually in the terminal!" % (f,f)
-        print ""
+        print("All these commands are saved in '%s' file! You may execute '%s' shell script or copy/paste all the previous commands and run them manually in the terminal!" % (f,f))
+        print("")
         txt.append("exit 0")
         txt.insert(0,'#!/usr/bin/env bash')
         file(f,'w').writelines([el+'\n' for el in txt])
@@ -2155,13 +2151,13 @@ python-openpyxl
 #        file(f,'w').writelines([el+'\n' for el in txt])
 #        os.system('chmod +rx "%s"' % (f,))
         ########################################################################
-        print ""
-        print "---------------------------------------------------------------------------"
-        print "*  OPTION 2: Build yourself the data needed by FusionCatcher!"
-        print "             TRY THIS ONLY IF OPTION 1!"
-        print "---------------------------------------------------------------------------"
-        print "In order to build yourself the latest human data files needed by FusionCatcher, please run these (it will take several hours):"
-        print ""
+        print("")
+        print("---------------------------------------------------------------------------")
+        print("*  OPTION 2: Build yourself the data needed by FusionCatcher!")
+        print("             TRY THIS ONLY IF OPTION 1!")
+        print("---------------------------------------------------------------------------")
+        print("In order to build yourself the latest human data files needed by FusionCatcher, please run these (it will take several hours):")
+        print("")
         txt = []
         txt.append("rm  -rf  %s" % (FUSIONCATCHER_CURRENT.replace(" ","\\ "),))
         txt.append("rm  -rf  %s" % (os.path.join(FUSIONCATCHER_DATA,ENSEMBL_VERSION).replace(" ","\\ "),))
@@ -2169,51 +2165,51 @@ python-openpyxl
         txt.append("ln  -s  %s  %s" % (os.path.join(FUSIONCATCHER_DATA,ENSEMBL_VERSION).replace(" ","\\ "),FUSIONCATCHER_CURRENT.replace(" ","\\ ")))
         txt.append("%s  -g  homo_sapiens  -o %s" % (os.path.join(FUSIONCATCHER_BIN,'fusioncatcher-build').replace(" ","\\ "),os.path.join(FUSIONCATCHER_DATA,ENSEMBL_VERSION).replace(" ","\\ ")))
         for t in txt:
-            print t
+            print(t)
         txt.append("exit 0")
         txt.insert(0,'#!/usr/bin/env bash')
         f = os.path.join(FUSIONCATCHER_BIN,"build.sh")
-        print ""
-        print "All these commands are saved in '%s' file! You may execute '%s' shell script or copy/paste all the previous commands and run them manually in the terminal!" % (f,f)
-        print ""
+        print("")
+        print("All these commands are saved in '%s' file! You may execute '%s' shell script or copy/paste all the previous commands and run them manually in the terminal!" % (f,f))
+        print("")
         file(f,'w').writelines([el+'\n' for el in txt])
         os.system('chmod +rx "%s"' % (f,))
         file_build = f
         ########################################################################
-        print "---------------------------------------------------------------------------"
+        print("---------------------------------------------------------------------------")
 
         forget = False
         if options.download:
-            print "---------------------------------------------------------------------------"
-            print "Downloading and installing the databases required by FusionCatcher"
-            print "---------------------------------------------------------------------------"
+            print("---------------------------------------------------------------------------")
+            print("Downloading and installing the databases required by FusionCatcher")
+            print("---------------------------------------------------------------------------")
             r = os.system(file_download)
             if r:
-                print HIGHLIGHT+"ERROR found!"+ENDC
-                print >>sys.stderr,"ERROR: Something went wrong during the execution of '%s'. Exit code %d." % (file_download,r)
+                print(HIGHLIGHT+"ERROR found!"+ENDC)
+                print("ERROR: Something went wrong during the execution of '%s'. Exit code %d." % (file_download,r), file=sys.stderr)
                 sys.exit(1)
-            print "--> DONE!"
+            print("--> DONE!")
             forget = True
         elif options.build:
-            print "---------------------------------------------------------------------------"
-            print "Building, downloading, and installing the databases required by FusionCatcher"
-            print "---------------------------------------------------------------------------"
+            print("---------------------------------------------------------------------------")
+            print("Building, downloading, and installing the databases required by FusionCatcher")
+            print("---------------------------------------------------------------------------")
             r = os.system(file_build)
             if r:
-                print HIGHLIGHT+"ERROR found!"+ENDC
-                print >>sys.stderr,"ERROR: Something went wrong during the execution of '%s'. Exit code %d." % (file_build,r)
+                print(HIGHLIGHT+"ERROR found!"+ENDC)
+                print("ERROR: Something went wrong during the execution of '%s'. Exit code %d." % (file_build,r), file=sys.stderr)
                 sys.exit(1)
-            print "--> DONE!"
+            print("--> DONE!")
             forget = True
-        print ""
-        print HIGHLIGHT+"--------------> THE END! <---------------------------"+ENDC
-        print ""
-        print ""
+        print("")
+        print(HIGHLIGHT+"--------------> THE END! <---------------------------"+ENDC)
+        print("")
+        print("")
         if not forget:
-            print "*****************************************************************"
-            print "*  DON'T FORGET to download (or build) the organism's data needed"
-            print "   by FusionCatcher to run (see above for options)!"
-            print "*****************************************************************"
+            print("*****************************************************************")
+            print("*  DON'T FORGET to download (or build) the organism's data needed")
+            print("   by FusionCatcher to run (see above for options)!")
+            print("*****************************************************************")
     #time.sleep(1)
 
 ####
