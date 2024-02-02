@@ -41,7 +41,7 @@ candidate fusion genes!
 
 This file is running/executing/using BLAT.
 """
-from __future__ import print_function
+
 
 from builtins import input
 from builtins import str
@@ -765,7 +765,8 @@ def install_tool(name, url, path, verbose = True, exit = True, env_configure = [
 
         if custom_install:
             # custom commands are passed to fix/install the tool
-            file(os.path.join(newdir,'custom_install.sh'),'w').writelines([line.rstrip('\r\n')+'\n' for line in custom_install])
+            with open(os.path.join(newdir, 'custom_install.sh'), 'w') as file:
+                file.writelines([line.rstrip('\r\n') + '\n' for line in custom_install])
             cwd = os.path.abspath(os.path.expanduser(os.getcwd()))
             cmds.append((["cd",newdir],True))
             cmds.append((["chmod","+x","custom_install.sh"],False))
@@ -851,9 +852,9 @@ def accept(question = "", yes = True, no = False, exit = False, force = False, s
         s = 's'
         while True:
             if skip:
-                text = input("%s [%s/%s/%s] (Y = YES, N = NO, S = SKIP): " % (question, y, n, s))
+                text = eval(input("%s [%s/%s/%s] (Y = YES, N = NO, S = SKIP): " % (question, y, n, s)))
             else:
-                text = input("%s [%s/%s]: " % (question, y, n))
+                text = eval(input("%s [%s/%s]: " % (question, y, n)))
             if not text:
                 if yes:
                     text = 'y'
@@ -906,7 +907,7 @@ def module(module,
                    exit = False,
                    force = force)
         if not r:
-            p = expand(input("  Type new path: "))
+            p = expand(eval(input("  Type new path: ")))
             if p:
                 path = p
             thepath = path
@@ -971,9 +972,9 @@ def tool(name,
         if not r:
             p = ''
             if skip:
-                p = expand(input("  Type new path (type S for SKIP): "))
+                p = expand(eval(input("  Type new path (type S for SKIP): ")))
             else:
-                p = expand(input("  Type new path: "))
+                p = expand(eval(input("  Type new path: ")))
                 if p:
                     path = p
                 thepath = path
@@ -1167,7 +1168,9 @@ python-openpyxl
     log = ''
     if options.log:
         log = expand(options.log)
-        file(log,"w").write("")
+        with open(log, 'w') as file:
+            file.write("")
+
 
     os.system("set +e") # make sure that the shell scripts are still executed if there are errors
     v = "human_v102"
@@ -1317,7 +1320,7 @@ python-openpyxl
         FUSIONCATCHER_PATH = expand(options.installation_directory)
         PATHS(exe = PYTHON_EXE, installdir = FUSIONCATCHER_PATH)
     else:
-        p = expand(input("  Type new path: "))
+        p = expand(eval(input("  Type new path: ")))
         PATHS(exe = PYTHON_EXE, installdir = p)
 
     ############################################################################
@@ -1332,7 +1335,7 @@ python-openpyxl
     if r:
         FUSIONCATCHER_THREADS = '1'
     else:
-        p = input("  Type the new default for number of threads: ")
+        p = eval(input("  Type the new default for number of threads: "))
         FUSIONCATCHER_THREADS = p
 
     ############################################################################
@@ -1378,11 +1381,12 @@ python-openpyxl
                                    "chmod +x ../test/*.sh",
                                    "chmod -R +r ../test/*",
                                    "rm -rf $(pwd)",
-                                   "cd .."
+                                   "cd ..",
 #                                   "deleteme=$(pwd)",
 #                                   "cd ..",
 #                                   'rm -rf "$deleteme"'
-                                   ]
+                                   ],
+                log = log
                 )
 
 
