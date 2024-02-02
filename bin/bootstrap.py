@@ -1217,37 +1217,6 @@ python-openpyxl
     print("  * Ok! '%s' found!" % (PYTHON_EXE,))
 
     ############################################################################
-    # Give option to exit to user if it is not the right Python
-    ############################################################################
-    print("Python used for installation of FusionCatcher: '%s'" % (PYTHON_EXE,))
-    r = accept(question = "  Do you accept this Python?",
-               yes = True,
-               no = False,
-               exit = False,
-               force = options.force_yes)
-    if not r:
-        p = expand(input("  Type new path and filename of the Python binary: "))
-        print("Now the boostrap.py will be re-launched!", file=sys.stderr)
-        x = '"%s" "%s" %s' % (p,expand(__file__),' '.join(sys.argv[1:]))
-        xx = os.system(x)
-        sys.exit(0)
-
-
-    ############################################################################
-    # Python version
-    ############################################################################
-    print("Checking Python version...")
-    version = sys.version_info
-    if version >= (2,6) and version < (3,0):
-        print("  * Ok! Found Python version: %s.%s" % (version[0],version[1]))
-    else:
-        print("  * ERROR: Found Python version: %s.%s !\n" % (version[0],version[1]), file=sys.stderr)
-        print("           The Python version should be >=2.6.0 and < 3.0 . If there is another", file=sys.stderr)
-        print("           Python version installed you could run again this script using that", file=sys.stderr)
-        print("           Python version, for example: '/some/other/pythonXYZ bootstrap.py' !", file=sys.stderr)
-        sys.exit(1)
-
-    ############################################################################
     # Test 64-bit environment
     ############################################################################
     print("Checking if this environment is a 64-bit environment...")
